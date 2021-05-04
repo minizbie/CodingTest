@@ -10,7 +10,7 @@ module.exports = async (done) => {
   const _calledContract = "0xe0fba4fc209b4948668006b2be61711b7f465bae";
   const erc20Address = usdt.address;
   const to = recipient;
-  const amount = web3.utils.toWei("1", "ether");
+  const amount = 100000000;
   const userAllowance = parseInt((await aUSDT.allowance(recipient, codingTest.address)).toString());
   if (userAllowance < amount) {
     aUSDT;
@@ -20,7 +20,7 @@ module.exports = async (done) => {
     await aUSDT.approve(codingTest.address, totalSupply);
     console.log(parseInt((await aUSDT.allowance(recipient, codingTest.address)).toString()));
   }
-  console.log("Withdrawing usdt from lending pool");
+  console.log("Withdrawing 1 usdt from lending pool");
   await codingTest.withdraw(_calledContract, erc20Address, amount, to);
   console.log("usdt balance After Withdrawing aUSDT", (await usdt.balanceOf(recipient)).toString());
   done();
