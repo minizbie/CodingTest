@@ -10,7 +10,7 @@ module.exports = async (done) => {
   const _calledContract = "0xe0fba4fc209b4948668006b2be61711b7f465bae";
   const erc20Address = usdt.address;
   const onBehalfOf = recipient2;
-  const amount = web3.utils.toWei("10", "ether"); //10 usdt tokens
+  const amount = 100000000 //1 usdt tokens
   const userAllowance = parseInt((await usdt.allowance(recipient2, codingTest.address)).toString());
   console.log("userAlloance for usdt", userAllowance);
   if (userAllowance < amount) {
