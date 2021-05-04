@@ -10,11 +10,16 @@ module.exports = async (done) => {
   const _calledContract = "0xe0fba4fc209b4948668006b2be61711b7f465bae";
   const erc20Address = dai.address;
   const onBehalfOf = recipient;
-  const amount = web3.utils.toWei("10", "ether");
-  if ((await dai.allowance(_calledContract, recipient)) < amount) {
-    console.log("Approving dai");
-    await dai.approve(_calledContract, amount);
+  const amount = web3.utils.toWei("10", "ether"); //10 DAI tokens
+  const userAllowance = parseInt((await dai.allowance(recipient, codingTest.address)).toString());
+  console.log(userAllowance);
+  if (userAllowance < amount) {
+    //Do unlimited approval here
+    console.log("Approving unlimited dai");
+    const totalSupply = await dai.totalSupply();
+    await dai.approve(codingTest.address, totalSupply);
   }
+  console.log("Depositing 10 DAI to aave lending pool");
   await codingTest.deposit(_calledContract, erc20Address, onBehalfOf, amount);
   console.log("aDai balance After depositing dai", (await aDai.balanceOf(recipient)).toString());
   done();
