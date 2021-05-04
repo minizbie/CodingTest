@@ -1,98 +1,9 @@
-//SPDX-License-Identifier:MIT
 pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
 
-interface MyContract {
-    /**
-     * @dev Emitted on deposit()
-     * @param reserve The address of the underlying asset of the reserve
-     * @param user The address initiating the deposit
-     * @param onBehalfOf The beneficiary of the deposit, receiving the aTokens
-     * @param amount The amount deposited
-     * @param referral The referral code used
-     **/
-    event Deposit(
-        address indexed reserve,
-        address user,
-        address indexed onBehalfOf,
-        uint256 amount,
-        uint16 indexed referral
-    );
-
-    /**
-     * @dev Emitted on withdraw()
-     * @param reserve The address of the underlyng asset being withdrawn
-     * @param user The address initiating the withdrawal, owner of aTokens
-     * @param to Address that will receive the underlying
-     * @param amount The amount to be withdrawn
-     **/
-    event Withdraw(
-        address indexed reserve,
-        address indexed user,
-        address indexed to,
-        uint256 amount
-    );
-
-    /**
-     * @dev Deposits an `amount` of underlying asset into the reserve, receiving in return overlying aTokens.
-     * - E.g. User deposits 100 USDC and gets in return 100 aUSDC
-     * @param asset The address of the underlying asset to deposit
-     * @param amount The amount to be deposited
-     * @param onBehalfOf The address that will receive the aTokens, same as msg.sender if the user
-     *   wants to receive them on his own wallet, or a different address if the beneficiary of aTokens
-     *   is a different wallet
-     * @param referralCode Code used to register the integrator originating the operation, for potential rewards.
-     *   0 if the action is executed directly by the user, without any middle-man
-     **/
-
-    function deposit(
-        address asset,
-        uint256 amount,
-        address onBehalfOf,
-        uint16 referralCode
-    ) external;
-
-    /**
-     * @dev Withdraws an `amount` of underlying asset from the reserve, burning the equivalent aTokens owned
-     * E.g. User has 100 aUSDC, calls withdraw() and receives 100 USDC, burning the 100 aUSDC
-     * @param asset The address of the underlying asset to withdraw
-     * @param amount The underlying amount to be withdrawn
-     *   - Send the value type(uint256).max in order to withdraw the whole aToken balance
-     * @param to Address that will receive the underlying, same as msg.sender if the user
-     *   wants to receive it on his own wallet, or a different address if the beneficiary is a
-     *   different wallet
-     * @return The final amount withdrawn
-     **/
-    function withdraw(
-        address asset,
-        uint256 amount,
-        address to
-    ) external returns (uint256);
-
-    /**
-     * @dev Returns the user account data across all the reserves
-     * @param user The address of the user
-     * @return totalCollateralETH the total collateral in ETH of the user
-     * @return totalDebtETH the total debt in ETH of the user
-     * @return availableBorrowsETH the borrowing power left of the user
-     * @return currentLiquidationThreshold the liquidation threshold of the user
-     * @return ltv the loan to value of the user
-     * @return healthFactor the current health factor of the user
-     **/
-    function getUserAccountData(address user)
-        external
-        view
-        returns (
-            uint256 totalCollateralETH,
-            uint256 totalDebtETH,
-            uint256 availableBorrowsETH,
-            uint256 currentLiquidationThreshold,
-            uint256 ltv,
-            uint256 healthFactor
-        );
-
+interface aavelendingPool {
     struct ReserveData {
         //stores the reserve configuration
         ReserveConfigurationMap configuration;
@@ -135,15 +46,55 @@ interface MyContract {
         external
         view
         returns (ReserveData memory);
+
+    function getUserAccountData(address user)
+        external
+        view
+        returns (
+            uint256 totalCollateralETH,
+            uint256 totalDebtETH,
+            uint256 availableBorrowsETH,
+            uint256 currentLiquidationThreshold,
+            uint256 ltv,
+            uint256 healthFactor
+        );
 }
 
-contract CodingTestV2 is Initializable {
+interface MyContract {
+    /// @dev Deposit ERC20 tokens on behalf of msg.sender to Aave Protocol
+    /// @param _erc20Contract The address fo the underlying asset to deposit to Aave Protocol v2
+    /// @param _amount The amount of the underlying asset to deposit
+    /// @return success Whether the deposit operation was successful or not
+    function deposit(address _erc20Contract, uint256 _amount)
+        external
+        returns (bool success);
+
+    /// @dev Withdraw ERC20 tokens on behalf of msg.sender from Aave Protocol
+    /// @param _erc20Contract The address of the underlyng asset being withdrawn
+    /// @param _amount The amount to be withdrawn
+    /// @return amountWithdrawn The actual amount withdrawn from Aave
+    function withdraw(address _erc20Contract, uint256 _amount)
+        external
+        returns (uint256 amountWithdrawn);
+
+    /// @dev Read only function
+    /// @return amountInEth Returns the value locked as collateral posted by msg.sender
+    function checkCollateralValueInEth()
+        external
+        view
+        returns (uint256 amountInEth);
+}
+
+contract CodingTestV2 is Initializable, MyContract {
+    address private lendingPool;
+    address public admin;
     event depositingToken(
         address indexed erc20Contract,
         address indexed user,
         uint256 amount,
         uint256 date
     );
+
     event withdrawingToken(
         address indexed erc20Contract,
         address indexed user,
@@ -151,8 +102,24 @@ contract CodingTestV2 is Initializable {
         uint256 date
     );
 
+    event setLendingPool(
+        address indexed oldLendingPool,
+        address indexed newlendingPool,
+        uint256 date
+    );
+
     //replace constructor with intializer
-    function initialize() public initializer {}
+    function initialize(address _lendingPool) public initializer {
+        lendingPool = _lendingPool;
+        admin = msg.sender;
+        emit setLendingPool(address(0), _lendingPool, block.timestamp);
+    }
+
+    function setlendingPool(address _newLendingPool) public {
+        require(msg.sender == admin, "call only owner");
+        emit setLendingPool(lendingPool, _newLendingPool, block.timestamp);
+        lendingPool = _newLendingPool;
+    }
 
     function doTransferFrom(
         address _calledContract,
@@ -176,79 +143,85 @@ contract CodingTestV2 is Initializable {
     }
 
     //User must approve 1st token for this contract
-    function deposit(
-        address _calledContract,
-        address _erc20Contract,
-        address onBehalfOf,
-        uint256 _amount
-    ) external {
+    function deposit(address _erc20Contract, uint256 _amount)
+        external
+        override
+        returns (bool)
+    {
         require(
-            doTransferFrom(_calledContract, _erc20Contract, _amount),
+            doTransferFrom(lendingPool, _erc20Contract, _amount),
             "Not enough tokens to approve"
         );
-        MyContract(_calledContract).deposit(
-            _erc20Contract,
-            _amount,
-            onBehalfOf,
-            0
-        );
+        (bool success, ) =
+            lendingPool.call(
+                abi.encodeWithSignature(
+                    "deposit(address,uint256,address,uint16)",
+                    _erc20Contract,
+                    _amount,
+                    msg.sender,
+                    0
+                )
+            );
+        require(success, "Contract execution Failed");
         emit depositingToken(
             _erc20Contract,
-            onBehalfOf,
+            msg.sender,
             _amount,
             block.timestamp
         );
+
+        return success;
     }
 
-    function withdraw(
-        address _calledContract,
-        address _erc20Contract,
-        uint256 _amount,
-        address _to
-    ) external returns (uint256 amountWithdrawn) {
-        MyContract.ReserveData memory aTokenAddress =
-            MyContract(_calledContract).getReserveData(_erc20Contract);
+    function withdraw(address _erc20Contract, uint256 _amount)
+        external
+        override
+        returns (uint256 amountWithdrawn)
+    {
+        aavelendingPool.ReserveData memory aTokenAddress =
+            aavelendingPool(lendingPool).getReserveData(_erc20Contract);
         require(
-            doTransferFrom(
-                _calledContract,
-                aTokenAddress.aTokenAddress,
-                _amount
-            ),
+            doTransferFrom(lendingPool, aTokenAddress.aTokenAddress, _amount),
             "Not enough tokens for approve"
         );
-        amountWithdrawn = MyContract(_calledContract).withdraw(
-            _erc20Contract,
-            _amount,
-            _to
-        );
+        (bool success, bytes memory data) =
+            lendingPool.call(
+                abi.encodeWithSignature(
+                    "withdraw(address,uint256,address)",
+                    _erc20Contract,
+                    _amount,
+                    msg.sender
+                )
+            );
+        require(success, "Contract execution Failed");
+        amountWithdrawn = abi.decode(data, (uint256));
         emit withdrawingToken(
             _erc20Contract,
-            _to,
+            msg.sender,
             amountWithdrawn,
             block.timestamp
         );
     }
 
-    function getUserAccountData(address _calledContract, address user)
+    function checkCollateralValueInEth()
         external
         view
-        returns (
-            uint256 totalCollateralETH,
-            uint256 totalDebtETH,
-            uint256 availableBorrowsETH,
-            uint256 currentLiquidationThreshold,
-            uint256 ltv,
-            uint256 healthFactor
-        )
+        override
+        returns (uint256 amountInEth)
     {
+        uint256 totalDebtETH;
+        uint256 availableBorrowsETH;
+        uint256 currentLiquidationThreshold;
+        uint256 ltv;
+        uint256 healthFactor;
         (
-            totalCollateralETH,
+            amountInEth,
             totalDebtETH,
             availableBorrowsETH,
             currentLiquidationThreshold,
             ltv,
             healthFactor
-        ) = MyContract(_calledContract).getUserAccountData(user);
+        ) = aavelendingPool(lendingPool).getUserAccountData(msg.sender);
     }
 
     function greet() public pure returns (string memory) {
