@@ -1,0 +1,140 @@
+{
+  "manifestVersion": "3.2",
+  "impls": {
+    "7fd5a61cb265056d6cb6fb256b69aab73f82cc7ee4695398aaabe841b56184ce": {
+      "address": "0x2B50a418EDda30456180Ab2F97bBE1982b55C454",
+      "txHash": "0xc80196f51e28125979cc7f82168a28465deedbc47409da9b59b55e6ffdba4166",
+      "layout": {
+        "storage": [],
+        "types": {}
+      }
+    },
+    "eeb65c7e72fdc02acbc4ae02799e5f0f71f7d6ffc219aef438b77f07e6ee84df": {
+      "address": "0x480517CEa80A2EA03d56f408b5bd56aD2318d80D",
+      "txHash": "0x0d6ed4ec810d5a10564df6f56a8d0847f42a28cb4dac882c358a82a881ca1759",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "initialized",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "initializing",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:26"
+          },
+          {
+            "contract": "Initializable",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:61"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          }
+        }
+      }
+    },
+    "7601edcafb869643e0953b170a33bc1873809ec6aa3775a2ce5c14a49aff6f86": {
+      "address": "0x64E5243Ebccc02cFf79ad5AeD63CA747a63Aa285",
+      "txHash": "0xb03b8806ec9867142fe4901d8392dde8a3ab49fe603b196c25c40061ec58228e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "initialized",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "initializing",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:26"
+          },
+          {
+            "contract": "Initializable",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:61"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          }
+        }
+      }
+    },
+    "0905eae62cd8be391d8b4e5eb08d7a83abb4cf109c5c4cc469f399f00e0a3d85": {
+      "address": "0x2D2d617A7BD1197EE368f1D764f89ECD9a308e43",
+      "txHash": "0x15b58f7d93f7ebf4bdbc3dcddd31a28dc6a56c1e9cf74dd0b35683c1c6c737a4",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "initialized",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "initializing",
+            "type": "t_bool",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:26"
+          },
+          {
+            "contract": "Initializable",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "..\\@openzeppelin\\contracts-ethereum-package\\contracts\\Initializable.sol:61"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          }
+        }
+      }
+    }
+  },
+  "proxies": [
+    {
+      "address": "0xee73656382533A757b9775D03C9D326C1ffDbB5B",
+      "kind": "transparent",
+      "txHash": "0x58274c60bd23d801204ff6e07722c6bc17414f66de9d6c3112caef2e3001d5df"
+    },
+    {
+      "address": "0x6a0e84b38B6ADfa6F113EfF6DC523ee7DaF952Ad",
+      "kind": "transparent",
+      "txHash": "0x9b530204c7a3c4f1250a9cbf22d340fba98854a14cf43dc162ababbbf6504e72"
+    }
+  ],
+  "admin": {
+    "address": "0xb4dC879fc8A46a6835fc2856CEe7D484D1Afb90E",
+    "txHash": "0xc72b5f40cbcc63d60b52afeb99e86cceab607eddb0d323b075e2e7b1122671e4"
+  }
+}
