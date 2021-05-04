@@ -8,9 +8,7 @@ module.exports = async (done) => {
   const usdtBalance = parseInt((await usdt.balanceOf(recipient)).toString());
   console.log("aUSDT balance before depositing usdt", parseInt((await aUSDT.balanceOf(recipient)).toString()) / 10 ** 6);
   const codingTest = await CodingTest.deployed();
-  const _calledContract = "0xe0fba4fc209b4948668006b2be61711b7f465bae";
   const erc20Address = usdt.address;
-  const onBehalfOf = recipient;
   const amount = 1000000; //10 usdt tokens
   const userAllowance = parseInt((await usdt.allowance(recipient, codingTest.address)).toString());
   if (userAllowance < amount) {
@@ -21,7 +19,7 @@ module.exports = async (done) => {
   }
   if (usdtBalance > amount) {
     console.log("Depositing 1 usdt to aave lending pool");
-    await codingTest.deposit(_calledContract, erc20Address, onBehalfOf, amount);
+    await codingTest.deposit(erc20Address, amount);
     console.log("aUSDT balance After depositing usdt", parseInt((await aUSDT.balanceOf(recipient)).toString()) / 10 ** 6);
   } else {
     console.log("You don't have enough USDT");
