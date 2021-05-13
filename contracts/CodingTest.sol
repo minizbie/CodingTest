@@ -3,7 +3,7 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
 
-interface aavelendingPool {
+interface ILendingPool {
     struct ReserveData {
         //stores the reserve configuration
         ReserveConfigurationMap configuration;
@@ -58,6 +58,8 @@ interface aavelendingPool {
             uint256 ltv,
             uint256 healthFactor
         );
+
+    function deposit(address asset, uint256 amount, address onBehalfOf, uint16 referralCode) external;
 }
 
 interface MyContract {
@@ -88,6 +90,7 @@ interface MyContract {
 contract CodingTest is Initializable, MyContract {
     address private lendingPool;
     address public admin;
+
     event depositingToken(
         address indexed erc20Contract,
         address indexed user,
@@ -173,13 +176,48 @@ contract CodingTest is Initializable, MyContract {
         return success;
     }
 
+    //User must approve 1st token for this contract
+    function deposit2(address _erc20Contract, uint256 _amount) external returns (bool)
+    {
+        require(doTransferFrom(lendingPool, _erc20Contract, _amount), "Not enough tokens to approve");
+
+        ILendingPool(lendingPool).deposit(_erc20Contract, _amount, msg.sender, 0);
+        emit depositingToken(_erc20Contract, msg.sender, _amount, block.timestamp);
+
+        return true;
+    }    
+
+    //User must approve 1st token for this contract
+    function deposit3(address _erc20Contract, uint256 _amount) external returns (bool)
+    {
+        require(doTransferFrom(lendingPool, _erc20Contract, _amount), "Not enough tokens to approve");
+
+        (bool success, ) =
+            lendingPool.call(
+                abi.encodeWithSelector(
+                    ILendingPool(lendingPool).deposit.selector, 
+                    _erc20Contract,
+                    _amount,
+                    msg.sender,
+                    0
+                )
+            );
+
+        require(success, "Contract execution Failed");
+
+        emit depositingToken(_erc20Contract, msg.sender, _amount, block.timestamp);
+
+        return true;
+    }    
+
+
     function withdraw(address _erc20Contract, uint256 _amount)
         external
         override
         returns (uint256 amountWithdrawn)
     {
-        aavelendingPool.ReserveData memory aTokenAddress =
-            aavelendingPool(lendingPool).getReserveData(_erc20Contract);
+        ILendingPool.ReserveData memory aTokenAddress =
+            ILendingPool(lendingPool).getReserveData(_erc20Contract);
         require(
             doTransferFrom(lendingPool, aTokenAddress.aTokenAddress, _amount),
             "Not enough tokens for approve"
@@ -221,6 +259,6 @@ contract CodingTest is Initializable, MyContract {
             currentLiquidationThreshold,
             ltv,
             healthFactor
-        ) = aavelendingPool(lendingPool).getUserAccountData(msg.sender);
+        ) = ILendingPool(lendingPool).getUserAccountData(msg.sender);
     }
 }

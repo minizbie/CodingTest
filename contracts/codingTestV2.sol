@@ -2,7 +2,7 @@ pragma solidity ^0.6.0;
 pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
-import {MyContract, aavelendingPool} from "./CodingTest.sol";
+import {MyContract, ILendingPool} from "./CodingTest.sol";
 
 contract CodingTestV2 is Initializable, MyContract {
     address private lendingPool;
@@ -97,8 +97,8 @@ contract CodingTestV2 is Initializable, MyContract {
         override
         returns (uint256 amountWithdrawn)
     {
-        aavelendingPool.ReserveData memory aTokenAddress =
-            aavelendingPool(lendingPool).getReserveData(_erc20Contract);
+        ILendingPool.ReserveData memory aTokenAddress =
+            ILendingPool(lendingPool).getReserveData(_erc20Contract);
         require(
             doTransferFrom(lendingPool, aTokenAddress.aTokenAddress, _amount),
             "Not enough tokens for approve"
@@ -140,7 +140,7 @@ contract CodingTestV2 is Initializable, MyContract {
             currentLiquidationThreshold,
             ltv,
             healthFactor
-        ) = aavelendingPool(lendingPool).getUserAccountData(msg.sender);
+        ) = ILendingPool(lendingPool).getUserAccountData(msg.sender);
     }
 
     function greet() public pure returns (string memory) {

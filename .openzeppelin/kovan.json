@@ -171,6 +171,110 @@
           }
         }
       }
+    },
+    "e10ec1d048e52c8592bf3fba13906c75ff138c43c67949d840ffdb0e21874d87": {
+      "address": "0x7Cf43940355043F574c6DD4B07b305184612a8bA",
+      "txHash": "0x021121803f95647c724cf979122d2bf41542ae15b8eae793e2cb2478f578b65f",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol:26"
+          },
+          {
+            "contract": "Initializable",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol:61"
+          },
+          {
+            "contract": "CodingTest",
+            "label": "lendingPool",
+            "type": "t_address",
+            "src": "CodingTest.sol:91"
+          },
+          {
+            "contract": "CodingTest",
+            "label": "admin",
+            "type": "t_address",
+            "src": "CodingTest.sol:92"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          }
+        }
+      }
+    },
+    "c43c25e2041e2e9c5cb757444bf2601c9541f52e7871dc99b282bdcd1af430ac": {
+      "address": "0x63963a7f46347cfdffe64eB992A7F271Cade2AF3",
+      "txHash": "0xa18835b0fcb6a7308daa982eb67afb76d6245dd41eefacdfd9e6648d8948814e",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol:21"
+          },
+          {
+            "contract": "Initializable",
+            "label": "initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol:26"
+          },
+          {
+            "contract": "Initializable",
+            "label": "______gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol:61"
+          },
+          {
+            "contract": "CodingTest",
+            "label": "lendingPool",
+            "type": "t_address",
+            "src": "CodingTest.sol:91"
+          },
+          {
+            "contract": "CodingTest",
+            "label": "admin",
+            "type": "t_address",
+            "src": "CodingTest.sol:92"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          }
+        }
+      }
     }
   },
   "proxies": [
@@ -188,6 +292,21 @@
       "address": "0x18087c16EC679014e216Bf8e032e3d05F4CFBF0e",
       "kind": "transparent",
       "txHash": "0xa202f65b80c028814bd844ec03c7ab5c08f884c629367a040e9e8cb8bf768502"
+    },
+    {
+      "address": "0x915f782217cE4D50923dE9E4A86c2DAb6b7485DD",
+      "kind": "transparent",
+      "txHash": "0x1446c7b808998a37fe373b9e55dc56b1bdb2ea3c8dc824e010468b8eeede33b4"
+    },
+    {
+      "address": "0x53650A9B8AC5e0Cc139D7396cb3448EB6e7c2618",
+      "kind": "transparent",
+      "txHash": "0x1e624d8a798f17955af525b1a6341068e7dd2ec4354e08f1b542fd21dfbdbdf3"
+    },
+    {
+      "address": "0x16d2A0b6A9D94428b94879Abb6c876D5a1627c86",
+      "kind": "transparent",
+      "txHash": "0xb3219fca0329f53d792813ace53406aada31a9d7420c430e847c37218021c0dc"
     }
   ],
   "admin": {
