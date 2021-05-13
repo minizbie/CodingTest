@@ -58,7 +58,7 @@ module.exports = {
     // Useful for deploying to a public network.
     // NB: It's important to wrap the provider as a function.
     kovan: {
-      provider: () => new HDWalletProvider(mnemonic, `wss://kovan.infura.io/ws/v3/45662a3729fa43678d13b210e60dee48`),
+      provider: () => new HDWalletProvider(mnemonic, `wss://kovan.infura.io/ws/v3/41fdfabd7b8441ebabb5e1a9af5f9801`),
       network_id: 42, // Ropsten's id
       gas: 5500000, // Ropsten has a lower block limit than mainnet
       confirmations: 0, // # of confs to wait between deployments. (default: 0)
